@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pronoun Mad Libs</title>
+		<link rel="stylesheet" href="assets/styles.css" />
+		<script src="assets/scripts.js"></script>
+		<script src="assets/scripts-darkmode.js"></script>
+		<link rel="icon" type="image/x-icon" href="assets/home/icon.png" />
+		<link id="favicon" rel="shortcut icon" href="assets/home/icon.png" />
+		<script>
+			(function () {
+				const storedTheme = localStorage.getItem("theme");
+				const prefersDark = window.matchMedia(
+					"(prefers-color-scheme: dark)"
+				).matches;
+				if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+					document.documentElement.classList.add("dark-mode");
+				} else if (storedTheme === "light") {
+					document.documentElement.classList.add("light-mode");
+				} // else: defaults to light via CSS :root
+			})();
+		</script>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Wacky Pronoun Story!</h1>
+			<p>Enter the words below, then see your story.</p>
+			<br />
+
+			<div id="options">
+				<h2>Options</h2>
+				<div>
+					<label for="boyName">Boy's Name:</label>
+					<input type="text" id="boyName" value="Kenji" />
+				</div>
+				<div>
+					<label for="girlName">Girl's Name:</label>
+					<input type="text" id="girlName" value="Maria" />
+				</div>
+				<div>
+					<label for="thing">A Thing (singular):</label>
+					<input type="text" id="thing" value="pineapple" />
+				</div>
+				<div>
+					<label for="pet">Kind of Pet (singular):</label>
+					<input type="text" id="pet" value="hamster" />
+				</div>
+			</div>
+
+			<button id="openStoryModalButton" onclick="openStoryModal()">
+				1. Choose Story
+			</button>
+			<button onclick="showOptions()">2. Change Options</button>
+			<button onclick="generateStoryWithBlanks()">3. Generate Story</button>
+			<button onclick="showAnswers()">4. Show Answers</button>
+
+			<div
+				id="storyWithBlanksOutput"
+				class="story-output"
+				style="display: none"
+			>
+				<h3>Story with Blanks:</h3>
+				<p id="storyBlanksText"></p>
+			</div>
+
+			<div id="storyAnswersOutput" class="story-output" style="display: none">
+				<h3>Story with Answers:</h3>
+				<p id="storyAnswersText"></p>
+			</div>
+		</div>
+
+		<dialog id="storyModal">
+			<div class="modal-header">
+				<h3>Choose Your Story</h3>
+				<!-- <button class="close-button" onclick="closeStoryModal()">X</button> -->
+			</div>
+
+			<label for="storyDropdown">Choose a Story:</label>
+			<select id="storyDropdown" onchange="loadSelectedStoryFromDropdown()">
+				<option value="">-- Select a Story --</option>
+			</select>
+
+			<div class="dialog-buttons">
+				<!-- <button onclick="loadRandomStory()">Load Random Story</button> -->
+				<button onclick="closeStoryModal()">Close</button>
+			</div>
+		</dialog>
+
+		<button id="theme-toggle" aria-label="Toggle dark mode"></button>
+
+		<button
+			id="language-toggle"
+			onclick="document.location='pronoun-mad-libs-jp.html'"
+			aria-label="Toggle language"
+		></button>
+
+		<script>
+			// --- Story Templates ---
+			// You can add more story templates here in the same format.
+			const storyTemplates = [
+				{
+					id: 1,
+					title: "The Mysterious Gift",
+					getBlanks: function (boy, girl, thingItem, petAnimal) {
+						return `
+            <ol>
+                <li>${boy} had a secret.</li>
+                <li><span class="blank">(${boy})</span> found a ${thingItem} under <span class="blank">(${boy}'s)</span> bed. </li>
+                <li>"What is <span class="blank">(${thingItem})</span>?" <span class="blank">(${boy})</span> wondered. </li>
+                <li>Just then, ${girl} knocked on the door.</li>
+                <li> <span class="blank">(${girl})</span> was looking for <span class="blank">(${girl}'s)</span> ${petAnimal}.</li>
+                <li>"Have you seen my <span class="blank">(${petAnimal})</span>?" <span class="blank">(${girl})</span> asked.</li>
+                <li>${boy} showed <span class="blank">(${girl})</span> the (${thingItem}). </li>
+                <li>"Is this <span class="blank">(${girl}'s)</span>?" <span class="blank">(${boy})</span> asked.</li>
+                <li><span class="blank">(${girl})</span> laughed. </li>
+                <li>"No, that's not <span class="blank">(${girl}'s)</span>!</li>
+                <li>But look, <span class="blank">(${girl}'s)</span> ${petAnimal} is playing with <span class="blank">(${thingItem})</span>!"</li>
+                <li><span class="blank">(${boy}) and (${girl})</span> both watched as the ${petAnimal} rolled the ${thingItem} around.</li>
+                <li><span class="blank">(${petAnimal})</span> seemed to think the ${thingItem} was a new toy.</li>
+                <li><span class="blank">(${boy}) and (${girl})</span> decided to share the discovery.</li>
+            </ol>
+            `;
+					},
+					getAnswers: function (
+						boy,
+						girl,
+						thingItem,
+						petAnimal,
+						petPronoun,
+						petPossessive,
+						petObjective
+					) {
+						// Simple pet pronoun logic (can be expanded)
+						// For simplicity, we'll mostly use 'it' for the pet in answers unless specified.
+						// You might prompt students for pet's gender for more advanced practice.
+						let petDisplayPronoun = petPronoun || "it";
+						let petDisplayPossessive = petPossessive || "its";
+						let petDisplayObjective = petObjective || "it";
+
+						// A common case: if the pet is 'hamster', 'dog', 'cat', users often use he/she.
+						// This is a very simplified example.
+						if (
+							petAnimal.toLowerCase().includes("dog") ||
+							petAnimal.toLowerCase().includes("cat") ||
+							petAnimal.toLowerCase().includes("hamster")
+						) {
+							// You could ask the student for the pet's gender, but for now we'll pick one for the example.
+							// Let's default to 'him' if not specified, to show an example.
+							// For the "Have you seen him/her/it?" blank, this needs context.
+							// We will assume the student will choose appropriately when filling blanks.
+							// The answer key here will use a reasonable default.
+							// This part can be made more complex if needed.
+							petDisplayPronoun = "it"; // Defaulting to 'he' for this example if it's a common pet
+							petDisplayPossessive = "its";
+							petDisplayObjective = "it";
+							// If you have a specific pet gender, you can pass it in.
+						}
+
+						return `
+            <ol>
+                <li>${boy}<span class="answer"></span> had a secret. </li>
+                <li><span class="answer">He</span> found a <span class="answer">${thingItem}</span> under <span class="answer">his</span> bed. </li>
+                <li>"What is <span class="answer">it</span>?" <span class="answer">he</span> wondered. </li>
+                <li>Just then, ${girl}<span class="answer"></span> knocked on the door.</li>
+                <li><span class="answer">She</span> was looking for <span class="answer">her</span> <span class="answer"></span>${petAnimal}.</li>
+                <li> "Have you seen <span class="answer">${petDisplayObjective}</span>?" <span class="answer">she</span> asked.</li>
+                <li><span class="answer">${boy}</span> showed <span class="answer">her</span> the ${thingItem}<span class="answer"></span>. </li>
+                <li>"Is this <span class="answer">yours</span>?" <span class="answer">he</span> asked. </li>
+                <li>She<span class="answer"></span> laughed. </li>
+                <li> "No, that's not <span class="answer">mine</span>!</li>
+                <li>But look, <span class="answer">my</span> ${petAnimal}<span class="answer"></span> is playing with <span class="answer">it</span>!"</li>
+                <li><span class="answer">They</span> both watched as the ${petAnimal}<span class="answer"></span> rolled the ${thingItem}<span class="answer"></span> around.</li>
+                <li> <span class="answer">It</span> seemed to think the ${thingItem}<span class="answer"></span> was a new toy.</li>
+                <li><span class="answer">They</span> decided to share the discovery.</li>
+            </ol>
+            `;
+					},
+				},
+				{
+					id: 2,
+					title: "The Adventures of Piney",
+					getBlanks: function (boy, girl, thingItem, petAnimal) {
+						return `
+            <ol>
+                <li>${boy} had a pineapple named Piney.</li>
+                <li><span class="blank">(${boy})</span> found a ${thingItem} under <span class="blank">(${boy}'s)</span> bed. </li>
+                <li>"What is <span class="blank">(${thingItem})</span>?" <span class="blank">(${boy})</span> wondered. </li>
+                <li>Just then, ${girl} knocked on the door.</li>
+                <li> <span class="blank">(${girl})</span> was looking for <span class="blank">(${girl}'s)</span> ${petAnimal}.</li>
+                <li>"Have you seen my <span class="blank">(${petAnimal})</span>?" <span class="blank">(${girl})</span> asked.</li>
+                <li>${boy} showed <span class="blank">(${girl})</span> the (${thingItem}). </li>
+                <li>"Is this <span class="blank">(${girl}'s)</span>?" <span class="blank">(${boy})</span> asked.</li>
+                <li><span class="blank">(${girl})</span> laughed. </li>
+                <li>"No, that's not <span class="blank">(${girl}'s)</span>!</li>
+                <li>But look, <span class="blank">(${girl}'s)</span> ${petAnimal} is playing with <span class="blank">(${thingItem})</span>!"</li>
+                <li><span class="blank">(${boy}) and (${girl})</span> both watched as the ${petAnimal} rolled the ${thingItem} around.</li>
+                <li><span class="blank">(${petAnimal})</span> seemed to think the ${thingItem} was a new toy.</li>
+                <li><span class="blank">(${boy}) and (${girl})</span> decided to share the discovery.</li>
+            </ol>
+            `;
+					},
+					getAnswers: function (
+						boy,
+						girl,
+						thingItem,
+						petAnimal,
+						petPronoun,
+						petPossessive,
+						petObjective
+					) {
+						let petDisplayPronoun = petPronoun || "it";
+						let petDisplayPossessive = petPossessive || "its";
+						let petDisplayObjective = petObjective || "it";
+
+						if (
+							petAnimal.toLowerCase().includes("dog") ||
+							petAnimal.toLowerCase().includes("cat") ||
+							petAnimal.toLowerCase().includes("hamster")
+						) {
+							petDisplayPronoun = "it";
+							petDisplayPossessive = "its";
+							petDisplayObjective = "it";
+						}
+
+						return `
+            <ol>
+                <li>${boy}<span class="answer"></span> had a pineapple named Piney. </li>
+                <li><span class="answer">He</span> found a <span class="answer">${thingItem}</span> under <span class="answer">his</span> bed. </li>
+                <li>"What is <span class="answer">it</span>?" <span class="answer">he</span> wondered. </li>
+                <li>Just then, ${girl}<span class="answer"></span> knocked on the door.</li>
+                <li><span class="answer">She</span> was looking for <span class="answer">her</span> <span class="answer"></span>${petAnimal}.</li>
+                <li> "Have you seen <span class="answer">${petDisplayObjective}</span>?" <span class="answer">she</span> asked.</li>
+                <li><span class="answer">${boy}</span> showed <span class="answer">her</span> the ${thingItem}<span class="answer"></span>. </li>
+                <li>"Is this <span class="answer">yours</span>?" <span class="answer">he</span> asked. </li>
+                <li>She<span class="answer"></span> laughed. </li>
+                <li> "No, that's not <span class="answer">mine</span>!</li>
+                <li>But look, <span class="answer">my</span> ${petAnimal}<span class="answer"></span> is playing with <span class="answer">it</span>!"</li>
+                <li><span class="answer">They</span> both watched as the ${petAnimal}<span class="answer"></span> rolled the ${thingItem}<span class="answer"></span> around.</li>
+                <li> <span class="answer">It</span> seemed to think the ${thingItem}<span class="answer"></span> was a new toy.</li>
+                <li><span class="answer">They</span> decided to share the discovery.</li>
+            </ol>
+            `;
+					},
+				},
+				// Add more story objects here following the same structure
+			];
+
+			let currentStoryInputs = {}; // To store the latest inputs for the current story
+			let selectedStoryTemplate = null; // To store the currently selected story template
+		</script>
+	</body>
+</html>

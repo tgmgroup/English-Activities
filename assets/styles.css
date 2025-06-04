@@ -1,0 +1,681 @@
+/* style.css */
+/* Combined styles for layout, theme, slides, toggles, and effects */
+
+/* ==========================================================================
+   1. FONT SETUP
+   ========================================================================== */
+
+@font-face {
+	font-family: "Klee One";
+	src: url("assets/fonts/KleeOne-Regular.ttf") format("truetype");
+	font-display: swap; /* Improves perceived performance */
+}
+
+@font-face {
+	font-family: "Noto Sans JP";
+	src: url("assets/fonts/NotoSansJP-VariableFont_wght.ttf") format("truetype");
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap; /* Improves perceived performance */
+}
+
+/* ==========================================================================
+   3. GLOBAL RESETS & BASE STYLES
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0; /* Reset margins */
+	padding: 0; /* Reset paddings */
+}
+
+/* --- Theme Variables --- */
+:root {
+	/* Light Mode Colors */
+	--bg-color: #f8f8f8;
+	--bg-color-divs: #b8b8b8;
+	--bg-color-bookshelf: #b8b8b882;
+	--bg-color-header: #e0e9fbbe;
+	--bg-color-text-divs: #f8f8f8d8;
+	--box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.015),
+		0 6px 20px 0 rgba(0, 0, 0, 0.015);
+	--text-color: #333333; /* Dark text for light mode */
+	--nav-bg: #e0e0e0;
+	--nav-bg-image: linear-gradient(203deg, #b8b8e5c7 0%, #7c7fddcf 90%);
+	--nav-icon-color: #555555;
+	--link-text: #171418;
+	--link-hover-bg: #ffffffc2;
+	--cta-bg: var(--nav-icon-color);
+	--cta-text: var(--nav-bg); /* Light text for dark button in light mode */
+	--slide-button-bg: rgba(0, 0, 0, 0.3);
+	--slide-button-hover-bg: rgba(0, 0, 0, 0.6);
+	--slide-button-text: white;
+
+	/* --- Hero Gradient Colors (Light Mode - Slightly Brighter/Different Palette) --- */
+	--hero-grad-1: hsl(280, 48%, 74%); /* Muted Violet */
+	--hero-grad-2: hsl(240, 47%, 79%); /* Muted Blue */
+	--hero-grad-3: hsl(180, 40%, 78%); /* Muted Cyan */
+	--hero-grad-4: hsl(120, 47%, 79%); /* Muted Green */
+	--hero-grad-5: hsl(60, 46%, 84%); /* Muted Yellow */
+	--hero-grad-6: hsl(20, 53%, 84%); /* Muted Orange */
+
+	--hero-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.003); /* Shadow for light mode */
+	--hero-cta-bg: hsla(
+		0,
+		0%,
+		20%,
+		0.7
+	); /* Darker semi-transparent btn for light mode */
+	--hero-cta-text: white; /* Light text on btn */
+	--hero-cta-hover-bg: hsla(0, 0%, 10%, 0.8);
+}
+
+html.dark {
+	/* Dark Mode Colors */
+	--bg-color: #1a1a1a;
+	--bg-color-divs: #080707;
+	--bg-color-bookshelf: #08070796;
+	--bg-color-header: #051129be;
+	--bg-color-text-divs: #080707c8;
+	--box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.015),
+		0 6px 20px 0 rgba(255, 255, 255, 0.015);
+	--text-color: #e0e0e0; /* Light text for dark mode */
+	--nav-bg: #2c2c2c;
+	--nav-bg-image: linear-gradient(203deg, #05062dc4 0%, #01000dcc 90%);
+	--nav-icon-color: #b0b0b0;
+	--link-text: #f6dbff;
+	--link-hover-bg: #000000ac;
+	--cta-bg: var(--nav-icon-color);
+	--cta-text: var(--nav-bg); /* Dark text for light button in dark mode */
+	--slide-button-bg: rgba(255, 255, 255, 0.2);
+	--slide-button-hover-bg: rgba(255, 255, 255, 0.4);
+	--slide-button-text: white;
+
+	/* --- Hero Gradient Colors (Dark Mode - Original Dark Rainbow) --- */
+	--hero-grad-1: hsl(0, 64%, 6%); /* Dark Red */
+	--hero-grad-2: hsl(41, 66%, 9%); /* Dark Orange */
+	--hero-grad-3: hsl(80, 67%, 7%); /* Dark Yellow-Green */
+	--hero-grad-4: hsl(160, 68%, 6%); /* Dark Teal */
+	--hero-grad-5: hsl(220, 66%, 8%); /* Dark Blue */
+	--hero-grad-6: hsl(280, 68%, 6%); /* Dark Violet */
+
+	--hero-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); /* Shadow for dark mode */
+	--hero-cta-bg: hsla(
+		0,
+		0%,
+		100%,
+		0.75
+	); /* Lighter semi-transparent btn for dark mode */
+	--hero-cta-text: #1a1a1a; /* Dark text on btn */
+	--hero-cta-hover-bg: hsla(0, 0%, 100%, 0.9);
+}
+/* --- End Theme Variables --- */
+
+/* --- Base Styles --- */
+html {
+	height: 100%;
+}
+
+body {
+	font-family: "Klee One";
+	line-height: 1.4;
+	margin: 20px;
+	background-color: var(--bg-color-divs);
+	color: var(--text-color); /* Default text color applies */
+
+	transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease;
+	text-align: center; /* Center text by default */
+	align-items: center; /* Center items horizontally */
+	/*margin: auto;  Center body content */
+	overflow-y: scroll;
+}
+.container {
+	background-color: var(--bg-color);
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+	color: #007bff;
+}
+label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: clamp(1.4rem, 2.5vh, 2rem);
+	font-family: "Klee One";
+}
+input[type="text"] {
+	font-size: clamp(1.4rem, 2.5vh, 2rem);
+	font-family: "Klee One";
+	width: calc(100% - 22px);
+	padding: 10px;
+	margin-bottom: 15px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+	text-align: center; /* Center text in input */
+}
+button {
+	background-color: #007bff;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-right: 10px;
+	font-size: 16px;
+}
+button:hover {
+	background-color: #0056b3;
+}
+.story-output {
+	margin-top: 20px;
+	padding: 15px;
+	background-color: #e9ecef;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+
+	text-align: left; /* Align text to the left */
+}
+.options {
+	margin-top: 20px;
+	padding: 15px;
+	background-color: #e9ecef;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+
+	text-align: center; /* Align text to the left */
+}
+
+li {
+	margin-left: 4rem;
+}
+.story-output h3 {
+	margin-top: 0;
+}
+.blank {
+	font-weight: bold;
+	color: #dc3545;
+	display: inline-block;
+	min-width: 80px;
+	border-bottom: 1px solid #dc3545;
+	text-align: center;
+}
+.answer {
+	font-weight: bold;
+	color: #28a745;
+}
+
+#options {
+	display: none;
+}
+
+/* Styles for the dialog (popup) */
+dialog {
+	border: none;
+	border-radius: 8px;
+	padding: 30px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	position: fixed; /* Ensures it's positioned relative to the viewport */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90%;
+	max-width: 500px;
+	z-index: 1000; /* Ensure it's on top */
+}
+dialog::backdrop {
+	background: rgba(0, 0, 0, 0.5);
+}
+dialog h2 {
+	margin-top: 0;
+	color: #0056b3;
+}
+dialog label {
+	display: block;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+dialog select {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+.dialog-buttons {
+	display: flex;
+	justify-content: flex-end; /* Align buttons to the right */
+	gap: 10px; /* Space between buttons */
+	margin-top: 20px;
+}
+.dialog-buttons button {
+	background-color: #6c757d; /* Gray for close/cancel */
+}
+.dialog-buttons button:hover {
+	background-color: #5a6268;
+}
+.dialog-buttons button.select-button {
+	background-color: #28a745; /* Green for select */
+}
+.dialog-buttons button.select-button:hover {
+	background-color: #218838;
+}
+
+/* --- Navigation Bar (Desktop - Default) --- */
+#icon-nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 60px;
+	background-color: var(--nav-bg);
+	background-image: var(--nav-bg-image);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	gap: 15px;
+	z-index: 10;
+	transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease,
+		top 0.3s ease, right 0.3s ease, left 0.3s ease, bottom 0.3s ease,
+		flex-direction 0s;
+	box-shadow: 0vw 0.01vw 0.5vw rgba(0, 0, 0, 0.2);
+}
+/* Nav Links and Base Button Styles (Shared) */
+#icon-nav a,
+#icon-nav button,
+#icon-nav img {
+	color: var(--nav-icon-color);
+	font-size: 24px;
+	text-decoration: none;
+	padding: 8px;
+	border-radius: 4px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background-color 0.2s ease, color 0.3s ease;
+	border: none;
+	background: none;
+	cursor: pointer;
+	width: 40px;
+	height: 40px;
+	flex-shrink: 0;
+	box-shadow: var(--box-shadow);
+}
+#icon-nav a:hover,
+#icon-nav button:hover {
+	background-color: var(--link-hover-bg);
+	box-shadow: var(--box-shadow);
+}
+/* Theme Toggle Button Specifics (Desktop) */
+#theme-toggle {
+	margin-top: auto;
+	box-shadow: var(--box-shadow);
+}
+
+/* ==========================================================================
+   REST OF YOUR CSS (Typography, Components, Utilities, etc.)
+   ========================================================================== */
+
+/* --- Typography --- */
+/* Consider using rem/em or clamp() for better accessibility */
+p {
+	font-size: clamp(1.3rem, 2vh, 1.6rem); /* Example using clamp */
+	line-height: 1.6;
+}
+
+.small-text {
+	font-size: clamp(0.9rem, 1.5vh, 1.1rem);
+	text-align: left;
+}
+
+h1 {
+	font-size: clamp(1.8rem, 3vh, 2.5rem);
+	font-weight: bold;
+}
+h2 {
+	font-size: clamp(1.6rem, 2.7vh, 2.2rem);
+	font-weight: bold;
+}
+h3 {
+	font-size: clamp(1.4rem, 2.5vh, 2rem);
+	font-weight: bold;
+}
+h4 {
+	font-size: clamp(1.2rem, 2vh, 1.8rem);
+	font-weight: bold;
+}
+h5 {
+	font-size: clamp(1rem, 1.5vh, 1.5rem);
+	font-weight: bold;
+}
+h6 {
+	font-size: clamp(0.8rem, 1vh, 1.2rem);
+	font-weight: bold;
+}
+small {
+	font-size: clamp(0.7rem, 0.8vh, 0.9rem);
+}
+select {
+	font-size: clamp(1.3rem, 2vh, 1.6rem); /* Example using clamp */
+	line-height: 1.6;
+	font-family: "Klee One";
+	width: 90%;
+	text-align: center;
+}
+
+.credit-text {
+	font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+	text-indent: 1em; /* Use em for relative indent */
+	line-height: 1.8;
+	text-align: justify;
+	color: var(--text-color);
+}
+
+.credit-text-small {
+	font-size: clamp(0.8rem, 1vw, 1rem);
+	font-family: "Noto Sans JP";
+	margin-left: 0.5em;
+	line-height: 1.4;
+	text-indent: -0.5em; /* Creates a hanging indent */
+}
+
+.credit-link {
+	cursor: pointer;
+	box-shadow: var(--box-shadow);
+	padding: 0.1em 0.3em; /* Add slight padding for hover bg */
+	border-radius: 3px;
+	transition: background-color 0.2s ease;
+}
+
+.credit-link:hover {
+	background-color: var(--link-hover-bg);
+}
+
+/* --- Component Styles --- */
+
+.item {
+	background-color: var(--bg-color);
+	box-shadow: none;
+	color: var(--text-color);
+	border-radius: 0vw;
+	border: 0vw solid #171717;
+	display: inline-grid; /* Changed from flex */
+	justify-content: center;
+	align-items: center;
+	font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+	font-weight: bold;
+}
+
+.header,
+.footer {
+	background-color: var(--bg-color-header);
+	font-size: 1.6rem;
+	color: var(--text-color); /* Default text color applies */
+	/* --- Animated Background --- */
+	background: linear-gradient(
+		135deg,
+		var(--hero-grad-1),
+		var(--hero-grad-2),
+		var(--hero-grad-3),
+		var(--hero-grad-4),
+		var(--hero-grad-5),
+		var(--hero-grad-6),
+		var(--hero-grad-1) /* Repeat first color for loop */
+	);
+	background-size: 500% 500%;
+	animation: waveAnimation 10s ease infinite;
+	/* --- End Animated Background --- */
+	box-shadow: 0vw 0.01vw 0.05vw rgba(0, 0, 0, 0.5);
+	border: 0vw;
+	text-align: center;
+	border-radius: 01.5vh;
+	margin: 0.1vw;
+	padding: 0.5em; /* Add padding */
+	display: flex; /* Use flex for alignment */
+	align-items: center;
+	justify-content: center;
+}
+
+/* (other button styles: .menu-button, .image-button-base, etc.) */
+
+a {
+	color: var(--link-text);
+	cursor: pointer;
+	text-decoration: none; /* Optional: remove default underline */
+}
+a:hover {
+	text-decoration: underline; /* Optional: add underline on hover */
+}
+
+a.button {
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	appearance: button;
+	text-decoration: none;
+	color: initial;
+	cursor: pointer;
+	/* Add padding, background etc. to style like a button */
+	padding: 0.5em 1em;
+	border: 1px solid var(--text-color);
+	border-radius: 4px;
+}
+
+/* --- Media Queries --- */
+
+/* Landscape Orientation (Optional refinements) */
+@media screen and (orientation: landscape) {
+	/* Styles specific to landscape if needed */
+}
+
+/* --- Mobile Styles (screens <= 768px) --- */
+@media screen and (max-width: 768px) {
+	body {
+		padding-left: 0; /* Remove side padding */
+		padding-top: 55px; /* Add padding for top nav */
+	}
+
+	#icon-nav {
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: auto;
+		width: 100%;
+		height: 55px; /* Mobile nav height */
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		padding: 0 10px;
+		gap: 5px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow */
+	}
+	#theme-toggle,
+	#snow-toggle {
+		margin-top: 0; /* Reset margin */
+	}
+
+	/* Adjust Container for Mobile */
+	#container {
+		flex-direction: column; /* Stack children vertically */
+		width: 100%; /* Full width */
+		margin-left: 0; /* Remove desktop nav margin */
+		min-height: calc(100vh - 55px); /* Account for mobile nav */
+		height: auto; /* Allow height to grow with content */
+		top: 0; /* Position relative to body padding */
+		position: relative; /* Change from fixed/absolute if it was */
+		/* Align items to the start (top) in column mode */
+		justify-content: flex-start;
+		align-items: center; /* Center items horizontally */
+	}
+
+	/* Adjust Hero for Mobile */
+	#hero {
+		width: 100%; /* Full width */
+		max-width: 100%; /* Override desktop max-width */
+		height: auto; /* Let content determine height */
+		min-height: 50vh; /* Example: minimum height */
+		order: 1; /* Stack order */
+		/* Adjust slide button positions relative to full width hero */
+	}
+
+	/* Adjust Bookshelf for Mobile */
+	.bookshelf {
+		width: 100%; /* Full width */
+		max-width: 100%; /* Override desktop max-width */
+		height: auto; /* Let content determine height */
+		min-height: 50vh; /* Example: minimum height */
+		order: 2; /* Stack order */
+		flex-direction: column; /* Stack logo and grid vertically on mobile */
+	}
+
+	.logo-section,
+	.grid-section {
+		flex: none; /* Disable flex grow/shrink */
+		width: 100%; /* Take full width */
+		min-height: auto; /* Adjust min-height if needed */
+		max-height: none; /* Remove max height */
+	}
+
+	.grid-section {
+		height: auto; /* Allow grid to size naturally */
+		overflow-y: visible; /* Disable scrolling if content fits */
+		padding: 5vw; /* Adjust padding */
+	}
+	.grid-item {
+		font-size: clamp(3.5vw, 5vh, 1.5rem); /* Adjust font size for mobile */
+		min-height: 20vh; /* Adjust item height */
+	}
+
+	#prev-slide,
+	#next-slide {
+		/* Adjust positioning for full-width hero */
+		left: 10px;
+		right: auto; /* Reset right */
+		font-size: 20px;
+		padding: 8px 12px;
+	}
+	#next-slide {
+		left: auto; /* Reset left */
+		right: 10px;
+	}
+
+	/* Adjust Typography for Mobile */
+	h1 {
+		font-size: 1.8rem;
+	}
+	h2 {
+		font-size: 1.5rem;
+	}
+	#hero h2 {
+		font-size: 1.8rem;
+	} /* Already exists */
+	#hero p {
+		font-size: 1rem;
+	} /* Already exists */
+	p {
+		font-size: 1rem;
+	}
+	.credit-text {
+		line-height: 1.5;
+		font-size: 0.9rem;
+	}
+	.credit-text-small {
+		line-height: 1.3;
+		font-size: 0.8rem;
+	}
+
+	/* Adjust component sizes / styles if needed */
+	.menu-button, .menu-button-small /* etc */ {
+		/* Consider using fixed pixel values or rems instead of vw for mobile */
+		/* Example:
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+        */
+	}
+}
+
+/* ======================================== */
+/* 4. Toggles
+/* ======================================== */
+#theme-toggle {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	background-color: var(--container-bg); /* Use container bg for context */
+	color: var(--text-color);
+	border: 1px solid var(--input-border-color); /* Use input border */
+	padding: 0.5rem;
+	cursor: pointer;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2em;
+	z-index: 1000;
+	box-shadow: 0 1px 3px var(--container-shadow); /* Subtle shadow */
+	transition: var(--theme-transition), transform 0.1s ease-out;
+}
+#theme-toggle:active {
+	transform: scale(0.95); /* Click feedback */
+}
+
+/* Example: Using text/emoji for icons */
+#theme-toggle::before {
+	content: "☀️"; /* Sun icon */
+	display: block; /* Ensure content takes space */
+	line-height: 1; /* Adjust line height if needed */
+}
+
+html.dark-mode #theme-toggle::before {
+	content: "🌙"; /* Moon icon */
+}
+
+/* Hide toggle content if using background images or SVG icons instead */
+/* #theme-toggle span { display: none; } */
+
+#language-toggle {
+	position: fixed;
+	top: 3rem;
+	right: 1rem;
+	background-color: var(--container-bg); /* Use container bg for context */
+	color: var(--text-color);
+	border: 1px solid var(--input-border-color); /* Use input border */
+	padding: 0.5rem;
+	cursor: pointer;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2em;
+	z-index: 1000;
+	box-shadow: 0 1px 3px var(--container-shadow); /* Subtle shadow */
+	transition: var(--theme-transition), transform 0.1s ease-out;
+}
+
+#language-toggle:active {
+	transform: scale(0.95); /* Click feedback */
+}
+
+/* Example: Using text/emoji for icons */
+#language-toggle::before {
+	content: "🇯🇵"; /* JP icon */
+	display: block; /* Ensure content takes space */
+	line-height: 1; /* Adjust line height if needed */
+}
+
+html.dark-mode #language-toggle::before {
+	content: "🇯🇵"; /* JP icon */
+}
+
+/* --- END --- */
