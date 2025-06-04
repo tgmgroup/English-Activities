@@ -7,13 +7,13 @@
 
 @font-face {
 	font-family: "Klee One";
-	src: url("/assets/fonts/KleeOne-Regular.ttf") format("truetype");
+	src: url("../assets/fonts/KleeOne-Regular.ttf") format("truetype");
 	font-display: swap; /* Improves perceived performance */
 }
 
 @font-face {
 	font-family: "Imprima";
-	src: url("/assets/fonts/Imprima-Regular.ttf") format("truetype");
+	src: url("../assets/fonts/Imprima-Regular.ttf") format("truetype");
 	font-display: swap; /* Improves perceived performance */
 }
 
